@@ -1,5 +1,8 @@
 .PHONY : test test-unit test-regression
 
+format:
+	@go fmt ./...
+
 test: test-unit test-regression
 
 test-unit:

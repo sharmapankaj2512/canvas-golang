@@ -8,10 +8,17 @@ import (
 
 var InvalidCanvasWidth = errors.New("height should be positive integer")
 var InvalidCanvasHeight = errors.New("height should be positive integer")
+var OutsideCanvasError = errors.New("point should be inside")
+
+type Coordinates struct {
+	x int
+	y int
+}
 
 type Canvas struct {
-	Width  int
-	Height int
+	Width   int
+	Height  int
+	colored map[Coordinates]bool
 }
 
 func NewCanvas(width string, height string) (*Canvas, error) {
@@ -23,7 +30,18 @@ func NewCanvas(width string, height string) (*Canvas, error) {
 	if err != nil || h < 0 {
 		return nil, InvalidCanvasHeight
 	}
-	return &Canvas{w, h}, nil
+	return &Canvas{w, h, make(map[Coordinates]bool)}, nil
+}
+
+func (c Canvas) Color(x int, y int) error {
+	if x < 0 || x >= c.Width {
+		return OutsideCanvasError
+	}
+	if y < 0 || y >= c.Height {
+		return OutsideCanvasError
+	}
+	c.colored[Coordinates{x, y}] = true
+	return nil
 }
 
 func (c Canvas) ToText() string {
@@ -44,10 +62,15 @@ func (c Canvas) makeHorizontalBorder() string {
 
 func (c Canvas) makeMiddleRow() string {
 	sb := strings.Builder{}
-	for h := 0; h < c.Height; h++ {
+	for y := 0; y < c.Height; y++ {
 		sb.WriteString("|")
-		for i := 0; i < c.Width; i++ {
-			sb.WriteString(" ")
+		for x := 0; x < c.Width; x++ {
+			_, ok := c.colored[Coordinates{x, y}]
+			if ok {
+				sb.WriteString("x")
+			} else {
+				sb.WriteString(" ")
+			}
 		}
 		sb.WriteString("|")
 		sb.WriteString("\n")

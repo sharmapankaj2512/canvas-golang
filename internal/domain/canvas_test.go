@@ -118,3 +118,39 @@ func TestReturnsSixSpaceCanvasAsTextForWidthThreeHeightTwo(t *testing.T) {
 
 	assertions.AssertEquals(t, expected, canvas.ToText())
 }
+
+func TestReturnsColoredCanvasAsText(t *testing.T) {
+	canvas, _ := NewCanvas("3", "2")
+	canvas.Color(0, 0)
+	expected := strings.TrimMargin(`
+		-----
+		|x  |
+		|   |
+		-----`)
+
+	assertions.AssertEquals(t, expected, canvas.ToText())
+}
+
+func TestReturnsErrorOnColorWhenXCoordinateIsLessThanZero(t *testing.T) {
+	canvas, _ := NewCanvas("3", "2")
+
+	assertions.AssertEquals(t, OutsideCanvasError, canvas.Color(-1, 0))
+}
+
+func TestReturnsErrorOnColorWhenXCoordinateIsGreaterThanMaxWidth(t *testing.T) {
+	canvas, _ := NewCanvas("3", "2")
+
+	assertions.AssertEquals(t, OutsideCanvasError, canvas.Color(-1, 4))
+}
+
+func TestReturnsErrorOnColorWhenYCoordinateIsLessThanZero(t *testing.T) {
+	canvas, _ := NewCanvas("3", "2")
+
+	assertions.AssertEquals(t, OutsideCanvasError, canvas.Color(0, -1))
+}
+
+func TestReturnsErrorOnColorWhenYCoordinateIsGreaterThanMaxHeight(t *testing.T) {
+	canvas, _ := NewCanvas("3", "2")
+
+	assertions.AssertEquals(t, OutsideCanvasError, canvas.Color(2, 3))
+}
