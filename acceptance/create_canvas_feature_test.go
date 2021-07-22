@@ -9,9 +9,9 @@ import (
 
 func TestCreateCanvas(t *testing.T) {
 	testCanvas := NewTestCanvas(t)
-	testCanvas.PrepareCreateCommand(20, 4)
-	testCanvas.PrepareQuitCommand()
-	testCanvas.Run()
+	testCanvas.CreateCanvas(20, 4)
+	testCanvas.Quit()
+	testCanvas.Paint()
 
 	expected := strings.TrimMargin(`
 	----------------------

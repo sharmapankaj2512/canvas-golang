@@ -28,19 +28,19 @@ func NewTestCanvas(t *testing.T) *TestCanvas {
 	}
 }
 
-func (a *TestCanvas) PrepareCreateCommand(width int, height int) {
+func (a *TestCanvas) CreateCanvas(width int, height int) {
 	_, _ = fmt.Fprintln(a.reader, fmt.Sprintf("C %d %d", width, height))
 }
 
-func (a *TestCanvas) PrepareDrawPointCommand(x int, y int) {
+func (a *TestCanvas) DrawPoint(x int, y int) {
 	_, _ = fmt.Fprintln(a.reader, fmt.Sprintf("P %d %d", x, y))
 }
 
-func (a *TestCanvas) PrepareQuitCommand() {
+func (a *TestCanvas) Quit() {
 	_, _ = fmt.Fprintln(a.reader, "quit")
 }
 
-func (a *TestCanvas) Run() {
+func (a *TestCanvas) Paint() {
 	c.NewApplication(a.reader, a.printer).Start()
 }
 
